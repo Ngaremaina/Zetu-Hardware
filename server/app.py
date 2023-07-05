@@ -7,6 +7,7 @@ from flask_migrate import Migrate
 from models import db, Customer, Hardware, Manufacturer
 
 app = Flask(__name__)
+app.debug = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
@@ -47,11 +48,6 @@ def get_customer(customer_id):
         'phone': customer.phone
     }
     return jsonify(customer=customer_data)
-
-
-
-
-
 
 
 # Hardware routes
@@ -186,6 +182,49 @@ def update_manufacturer(manufacturer_id):
     db.session.commit() 
 
     return jsonify(message='Manufacturer updated successfully')
+
+# DELETE ROUTES
+
+@app.route('/customers/<int:customer_id>', methods=['DELETE'])
+def delete_customer(customer_id):
+    customer = Customer.query.get(customer_id)
+
+    if not customer:
+        return jsonify(message='Customer not found'), 404
+
+    # Delete the customer's associated hardware records
+    Hardware.query.filter_by(customer_id=customer_id).delete()
+    
+    db.session.delete(customer)
+    db.session.commit()
+
+    return jsonify(message='Customer and associated hardware deleted successfully')
+
+
+@app.route('/hardware/<int:hardware_id>', methods=['DELETE'])
+def delete_hardware(hardware_id):
+    hardware = Hardware.query.get(hardware_id)
+
+    if not hardware:
+        return jsonify(message='Hardware not found'), 404
+
+    db.session.delete(hardware)
+    db.session.commit()
+
+    return jsonify(message='Hardware deleted successfully')
+
+@app.route('/manufacturers/<int:manufacturer_id>', methods=['DELETE'])
+def delete_manufacturer(manufacturer_id):
+    manufacturer = Manufacturer.query.get_or_404(manufacturer_id)
+
+    hardware_delete_result = Hardware.query.filter_by(manufacturer_id=manufacturer_id).delete()
+    if hardware_delete_result > 0:
+        db.session.delete(manufacturer)
+        db.session.commit()
+        return jsonify({'message': 'Manufacturer deleted successfully'})
+    else:
+        return jsonify({'error': 'No associated hardware found'}), 404
+
 
 
 
