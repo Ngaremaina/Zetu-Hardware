@@ -14,9 +14,9 @@ class Customer(db.Model):
     hardware = db.relationship('Hardware',backref='customer', lazy=True)
 
  
-class Hardware(db.Model):
+class Hardware(db.Model, SerializerMixin):
     __tablename__ = 'hardwares'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
     manufacturer_id = db.Column(db.Integer, db.ForeignKey('manufacturer.id'), nullable=False)
@@ -24,7 +24,7 @@ class Hardware(db.Model):
     description = db.Column(db.String(255))
     price = db.Column(db.Integer)
     category = db.Column(db.String(255))
-    
+
 
 class Manufacturer(db.Model):
     __tablename__ = 'manufacturer'
@@ -35,4 +35,3 @@ class Manufacturer(db.Model):
     phone = db.Column(db.String(10))
     password = db.Column(db.String(255))
     hardware = db.relationship('Hardware', backref='manufacturer', lazy=True)
-

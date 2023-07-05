@@ -1,5 +1,3 @@
-# server/app.py
-
 from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -49,6 +47,21 @@ def get_customer(customer_id):
     }
     return jsonify(customer=customer_data)
 
+@app.route("/addcustomers", methods = ["POST"])
+def post_customer():
+    data = request.get_json()
+    new_customer = Customer(
+        firstname = data["firstname"],
+        lastname = data["lastname"],
+        email = data["email"],
+        phone = data["phone"],
+        password = data["password"]
+    )
+    db.session.add(new_customer)
+    db.session.commit()
+    return make_response(jsonify({"message":"Customer added successfully"}))
+
+
 
 # Hardware routes
 
@@ -83,6 +96,21 @@ def get_hardware_item(hardware_id):
     }
     return jsonify(hardware=hardware_data)
 
+@app.route("/addhardwares", methods = ["POST"])
+def post_hardware():
+    data = request.get_json()
+    new_hardware = Hardware(
+        customer_id = data["customer_id"],
+        manufacturer_id = data["manufacturer_id"],
+        name = data["name"],
+        description = data["description"],
+        price = data["price"],
+        category=data["category"],
+    )
+    db.session.add(new_hardware)
+    db.session.commit()
+    return make_response(jsonify({"message":"Hardware added successfully"}))
+
 # Manufacturer routes
 
 @app.route('/manufacturers', methods=['GET'])
@@ -113,6 +141,19 @@ def get_manufacturer(manufacturer_id):
     return jsonify(manufacturer=manufacturer_data)
 
 
+@app.route("/addmanufacturer", methods = ["POST"])
+def post_manufacturer():
+    data = request.get_json()
+    new_manufacturer = Manufacturer(
+        firstname = data["firstname"],
+        lastname = data["lastname"],
+        email = data["email"],
+        phone = data["phone"],
+        password = data["password"]
+    )
+    db.session.add(new_manufacturer)
+    db.session.commit()
+    return make_response(jsonify({"message":"Manufacturer added successfully"}))
 # PATCH ROUTES
 
 @app.route('/customers/<int:customer_id>', methods=['PATCH'])
