@@ -117,12 +117,75 @@ def get_manufacturer(manufacturer_id):
     return jsonify(manufacturer=manufacturer_data)
 
 
+# PATCH ROUTES
+
+@app.route('/customers/<int:customer_id>', methods=['PATCH'])
+def update_customer(customer_id):
+    customer = Customer.query.get(customer_id)
+
+    if not customer:
+        return jsonify(message='Customer not found'), 404
+   
+    updated_data = request.json
+   
+    if 'firstname' in updated_data:
+        customer.firstname = updated_data['firstname']
+    if 'lastname' in updated_data:
+        customer.lastname = updated_data['lastname']
+    if 'email' in updated_data:
+        customer.email = updated_data['email']
+    if 'phone' in updated_data:
+        customer.phone = updated_data['phone']
+    
+    db.session.commit()   
+
+    return jsonify(message='Customer updated successfully')
 
 
 
+@app.route('/hardware/<int:item_id>', methods=['PATCH'])
+def update_hardware(item_id):
+    hardware = Hardware.query.get(item_id)
 
+    if not hardware:
+        return jsonify(message='Hardware item not found'), 404
+   
+    updated_data = request.json
+   
+    if 'name' in updated_data:
+        hardware.name = updated_data['name']
+    if 'description' in updated_data:
+        hardware.description = updated_data['description']
+    if 'price' in updated_data:
+        hardware.price = updated_data['price']
+    if 'category' in updated_data:
+        hardware.category = updated_data['category']
 
+    db.session.commit()
 
+    return jsonify(message='Hardware item updated successfully')
+
+@app.route('/manufacturers/<int:manufacturer_id>', methods=['PATCH'])
+def update_manufacturer(manufacturer_id):
+    manufacturer = Manufacturer.query.get(manufacturer_id)
+
+    if not manufacturer:
+        return jsonify(message='Manufacturer not found'), 404
+
+    updated_data = request.json
+    
+    if 'firstname' in updated_data:
+        manufacturer.firstname = updated_data['firstname']
+    if 'lastname' in updated_data:
+        manufacturer.lastname = updated_data['lastname']
+    if 'email' in updated_data:
+        manufacturer.email = updated_data['email']
+    if 'phone' in updated_data:
+        manufacturer.phone = updated_data['phone']
+
+    db.session.commit() 
+
+    return jsonify(message='Manufacturer updated successfully')
 
 
 
