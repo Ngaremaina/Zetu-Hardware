@@ -155,125 +155,10 @@ def post_manufacturer():
     db.session.add(new_manufacturer)
     db.session.commit()
     return make_response(jsonify({"message":"Manufacturer added successfully"}))
+
+
+
 # PATCH ROUTES
-
-@app.route('/customers/<int:customer_id>', methods=['PATCH'])
-def update_customer(customer_id):
-    customer = Customer.query.get(customer_id)
-
-    if not customer:
-        return jsonify(message='Customer not found'), 404
-   
-    updated_data = request.json
-   
-    if 'firstname' in updated_data:
-        customer.firstname = updated_data['firstname']
-    if 'lastname' in updated_data:
-        customer.lastname = updated_data['lastname']
-    if 'email' in updated_data:
-        customer.email = updated_data['email']
-    if 'phone' in updated_data:
-        customer.phone = updated_data['phone']
-    
-    db.session.commit()   
-
-    return jsonify(message='Customer updated successfully')
-
-
-
-@app.route('/hardware/<int:item_id>', methods=['PATCH'])
-def update_hardware(item_id):
-    hardware = Hardware.query.get(item_id)
-
-    if not hardware:
-        return jsonify(message='Hardware item not found'), 404
-   
-    updated_data = request.json
-   
-    if 'name' in updated_data:
-        hardware.name = updated_data['name']
-    if 'description' in updated_data:
-        hardware.description = updated_data['description']
-    if 'price' in updated_data:
-        hardware.price = updated_data['price']
-    if 'category' in updated_data:
-        hardware.category = updated_data['category']
-
-    db.session.commit()
-
-    return jsonify(message='Hardware item updated successfully')
-
-@app.route('/manufacturers/<int:manufacturer_id>', methods=['PATCH'])
-def update_manufacturer(manufacturer_id):
-    manufacturer = Manufacturer.query.get(manufacturer_id)
-
-    if not manufacturer:
-        return jsonify(message='Manufacturer not found'), 404
-
-    updated_data = request.json
-    
-    if 'firstname' in updated_data:
-        manufacturer.firstname = updated_data['firstname']
-    if 'lastname' in updated_data:
-        manufacturer.lastname = updated_data['lastname']
-    if 'email' in updated_data:
-        manufacturer.email = updated_data['email']
-    if 'phone' in updated_data:
-        manufacturer.phone = updated_data['phone']
-
-    db.session.commit() 
-
-    return jsonify(message='Manufacturer updated successfully')
-
-# DELETE ROUTES
-
-@app.route('/customers/<int:customer_id>', methods=['DELETE'])
-def delete_customer(customer_id):
-    customer = Customer.query.get(customer_id)
-
-    if not customer:
-        return jsonify(message='Customer not found'), 404
-
-    # Delete the customer's associated hardware records
-    Hardware.query.filter_by(customer_id=customer_id).delete()
-    
-    db.session.delete(customer)
-    db.session.commit()
-
-    return jsonify(message='Customer and associated hardware deleted successfully')
-
-
-@app.route('/hardware/<int:hardware_id>', methods=['DELETE'])
-def delete_hardware(hardware_id):
-    hardware = Hardware.query.get(hardware_id)
-
-    if not hardware:
-        return jsonify(message='Hardware not found'), 404
-
-    db.session.delete(hardware)
-    db.session.commit()
-
-    return jsonify(message='Hardware deleted successfully')
-
-@app.route('/manufacturers/<int:manufacturer_id>', methods=['DELETE'])
-def delete_manufacturer(manufacturer_id):
-    manufacturer = Manufacturer.query.get_or_404(manufacturer_id)
-
-    hardware_delete_result = Hardware.query.filter_by(manufacturer_id=manufacturer_id).delete()
-    if hardware_delete_result > 0:
-        db.session.delete(manufacturer)
-        db.session.commit()
-        return jsonify({'message': 'Manufacturer deleted successfully'})
-    else:
-        return jsonify({'error': 'No associated hardware found'}), 404
-
-
-
-
-
-
-
- PATCH ROUTES
 
 @app.route('/customers/<int:customer_id>', methods=['PATCH'])
 def update_customer(customer_id):
@@ -383,6 +268,6 @@ def delete_manufacturer(manufacturer_id):
         db.session.commit()
         return jsonify({'message': 'Manufacturer deleted successfully'})
     else:
-        return jsonify({'error': 'No associated hardware found'}), 404#
+        return jsonify({'error': 'No associated hardware found'}), 404
 if __name__ == '__main__':
     app.run(port=5555)
