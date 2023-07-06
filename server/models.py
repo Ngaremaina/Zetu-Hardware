@@ -14,7 +14,7 @@ class Customer(db.Model):
     hardware = db.relationship('Hardware',backref='customer', lazy=True)
 
  
-class Hardware(db.Model, SerializerMixin):
+class Hardware(db.Model):
     __tablename__ = 'hardwares'
 
     id = db.Column(db.Integer, primary_key=True)
