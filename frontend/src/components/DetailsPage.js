@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams,useNavigate } from "react-router-dom";
 const DetailsPage = () => {
     const [hardware, setHardware] = useState([])
     const { id } = useParams()
+    const navigate = useNavigate()
 
     useEffect(() => {
         fetch(`/hardware/${id}`)
@@ -15,6 +16,18 @@ const DetailsPage = () => {
 
     },[id])
 
+    const handleDelete = () => {
+        fetch(`/hardware/${id}`, {
+            method:"DELETE"
+        })
+        .then(res => res.json())
+        .then(data => setHardware(data))
+
+        navigate('/hardware')
+
+        
+    }
+
     const displayData = Object.values(hardware).map(item => {
         console.log(item.name)
         var showdetails = <div>
@@ -22,6 +35,7 @@ const DetailsPage = () => {
             <p>{item.price}</p>
             <p>{item.description}</p>
             <p>{item.category}</p>
+            <button onClick={handleDelete}>Delete</button>
 
         </div>
         return showdetails    
@@ -33,9 +47,6 @@ const DetailsPage = () => {
         </div>
       
     )
-
-
-
 
 }
 

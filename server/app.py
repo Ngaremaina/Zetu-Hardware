@@ -1,3 +1,5 @@
+# server/app.py
+
 from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -47,21 +49,6 @@ def get_customer(customer_id):
     }
     return jsonify(customer=customer_data)
 
-@app.route("/addcustomers", methods = ["POST"])
-def post_customer():
-    data = request.get_json()
-    new_customer = Customer(
-        firstname = data["firstname"],
-        lastname = data["lastname"],
-        email = data["email"],
-        phone = data["phone"],
-        password = data["password"]
-    )
-    db.session.add(new_customer)
-    db.session.commit()
-    return make_response(jsonify({"message":"Customer added successfully"}))
-
-
 
 # Hardware routes
 
@@ -96,21 +83,6 @@ def get_hardware_item(hardware_id):
     }
     return jsonify(hardware=hardware_data)
 
-@app.route("/addhardwares", methods = ["POST"])
-def post_hardware():
-    data = request.get_json()
-    new_hardware = Hardware(
-        customer_id = data["customer_id"],
-        manufacturer_id = data["manufacturer_id"],
-        name = data["name"],
-        description = data["description"],
-        price = data["price"],
-        category=data["category"],
-    )
-    db.session.add(new_hardware)
-    db.session.commit()
-    return make_response(jsonify({"message":"Hardware added successfully"}))
-
 # Manufacturer routes
 
 @app.route('/manufacturers', methods=['GET'])
@@ -140,6 +112,35 @@ def get_manufacturer(manufacturer_id):
     }
     return jsonify(manufacturer=manufacturer_data)
 
+#POST ROUTES
+@app.route("/addhardwares", methods = ["POST"])
+def post_hardware():
+    data = request.get_json()
+    new_hardware = Hardware(
+        customer_id = data["customer_id"],
+        manufacturer_id = data["manufacturer_id"],
+        name = data["name"],
+        description = data["description"],
+        price = data["price"],
+        category=data["category"],
+    )
+    db.session.add(new_hardware)
+    db.session.commit()
+    return make_response(jsonify({"message":"Hardware added successfully"}))
+
+@app.route("/addcustomers", methods = ["POST"])
+def post_customer():
+    data = request.get_json()
+    new_customer = Customer(
+        firstname = data["firstname"],
+        lastname = data["lastname"],
+        email = data["email"],
+        phone = data["phone"],
+        password = data["password"]
+    )
+    db.session.add(new_customer)
+    db.session.commit()
+    return make_response(jsonify({"message":"Customer added successfully"}))
 
 @app.route("/addmanufacturer", methods = ["POST"])
 def post_manufacturer():
@@ -271,5 +272,117 @@ def delete_manufacturer(manufacturer_id):
 
 
 
+
+ PATCH ROUTES
+
+@app.route('/customers/<int:customer_id>', methods=['PATCH'])
+def update_customer(customer_id):
+    customer = Customer.query.get(customer_id)
+
+    if not customer:
+        return jsonify(message='Customer not found'), 404
+   
+    updated_data = request.json
+   
+    if 'firstname' in updated_data:
+        customer.firstname = updated_data['firstname']
+    if 'lastname' in updated_data:
+        customer.lastname = updated_data['lastname']
+    if 'email' in updated_data:
+        customer.email = updated_data['email']
+    if 'phone' in updated_data:
+        customer.phone = updated_data['phone']
+    
+    db.session.commit()   
+
+    return jsonify(message='Customer updated successfully')
+
+
+
+@app.route('/hardware/<int:item_id>', methods=['PATCH'])
+def update_hardware(item_id):
+    hardware = Hardware.query.get(item_id)
+
+    if not hardware:
+        return jsonify(message='Hardware item not found'), 404
+   
+    updated_data = request.json
+   
+    if 'name' in updated_data:
+        hardware.name = updated_data['name']
+    if 'description' in updated_data:
+        hardware.description = updated_data['description']
+    if 'price' in updated_data:
+        hardware.price = updated_data['price']
+    if 'category' in updated_data:
+        hardware.category = updated_data['category']
+
+    db.session.commit()
+
+    return jsonify(message='Hardware item updated successfully')
+
+@app.route('/manufacturers/<int:manufacturer_id>', methods=['PATCH'])
+def update_manufacturer(manufacturer_id):
+    manufacturer = Manufacturer.query.get(manufacturer_id)
+
+    if not manufacturer:
+        return jsonify(message='Manufacturer not found'), 404
+
+    updated_data = request.json
+    
+    if 'firstname' in updated_data:
+        manufacturer.firstname = updated_data['firstname']
+    if 'lastname' in updated_data:
+        manufacturer.lastname = updated_data['lastname']
+    if 'email' in updated_data:
+        manufacturer.email = updated_data['email']
+    if 'phone' in updated_data:
+        manufacturer.phone = updated_data['phone']
+
+    db.session.commit() 
+
+    return jsonify(message='Manufacturer updated successfully')
+
+# DELETE ROUTES
+
+@app.route('/customers/<int:customer_id>', methods=['DELETE'])
+def delete_customer(customer_id):
+    customer = Customer.query.filter_by(id = customer_id).first()
+
+    if not customer:
+        return jsonify(message='Customer not found'), 404
+
+    # Delete the customer's associated hardware records
+    Hardware.query.filter_by(customer_id=customer_id).delete()
+    
+    db.session.delete(customer)
+    db.session.commit()
+
+    return jsonify(message='Customer and associated hardware deleted successfully')
+
+
+@app.route('/hardware/<int:hardware_id>', methods=['DELETE'])
+def delete_hardware(hardware_id):
+    hardware = Hardware.query.filter_by(id = hardware_id).first()
+
+    if not hardware:
+        return jsonify({"message":'Hardware not found'}), 404
+
+    db.session.delete(hardware)
+    db.session.commit()
+
+    return jsonify({"message":'Hardware deleted successfully'})
+
+@app.route('/manufacturers/<int:manufacturer_id>', methods=['DELETE'])
+def delete_manufacturer(manufacturer_id):
+    manufacturer = Manufacturer.query.filter_by(id = manufacturer_id).first()
+
+    hardware_delete_result = Hardware.query.filter_by(manufacturer_id=manufacturer_id).delete()
+    if hardware_delete_result > 0:
+        db.session.delete(manufacturer)
+        db.session.commit()
+        return jsonify({'message': 'Manufacturer deleted successfully'})
+    else:
+        return jsonify({'error': 'No associated hardware found'}), 404#
 if __name__ == '__main__':
     app.run(port=5555)

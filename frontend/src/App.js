@@ -17,8 +17,6 @@ function App() {
       // console.log(hardwares)
     })
   },[])
-
-  
   
   
   return (
