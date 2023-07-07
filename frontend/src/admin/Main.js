@@ -1,21 +1,25 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import NavHeader from "./NavHeader";
 import Sidebar from "./Sidebar";
-import Sales from "./Sales";
 import Dashboard from "./Dashboard";
-import Body from "./Body";
-import Admin from "./Admin";
+import "./Main.css"
+
 const Main = () => {
+    const [users, setUsers] = useState([])
+    useEffect(() => {
+        fetch("/customers")
+        .then(res => res.json())
+        .then(data => {
+          setUsers(data)
+          // console.log(hardwares)
+        })
+      },[])
+    
     return(
         <div>
             <NavHeader />
             <Sidebar />
-            <Dashboard />
-            {/* <Body/> */}
-            {/* <Sales /> */}
-            
-            {/* <Admin/> */}
-
+            <Dashboard users = {users} />
         </div>
     )
 

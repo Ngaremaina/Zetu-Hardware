@@ -3,16 +3,19 @@
 from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
+from flask_bcrypt import Bcrypt
 
 from models import db, Customer, Hardware, Manufacturer
 
 app = Flask(__name__)
+
 app.debug = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
 CORS(app)
+bcrypt = Bcrypt(app)
 migrate = Migrate(app, db)
 
 db.init_app(app)
@@ -20,6 +23,51 @@ db.init_app(app)
 @app.route('/')
 def index():
     return "Index for Customer/Hardware/Manufacturer API"
+
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.json['email']
+    password = request.json['password']
+    user = Customer.query.filter_by(email=email).first()
+    if user:
+        if bcrypt.check_password_hash(user.password, password):
+            db.session['id'] = user.id
+            return jsonify({'message': 'Login Successful'})
+        else:
+            return jsonify({'message': 'Invalid Credentials'})
+    else:
+        return jsonify({'message': 'User not found'})
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    if 'email' in request.json and 'password' in request.json:
+        email = request.json['email']
+        existing_user = Customer.query.filter_by(email=email).first()
+        if existing_user:
+            return jsonify({'message': 'Username already exists'})
+        else:
+            password = request.json['password']
+            hashed_password = bcrypt.generate_password_hash(password)
+            data = request.get_json()
+            new_user = Customer(
+                firstname = data["firstname"],
+                lastname = data["lastname"],
+                email = data["email"],
+                phone = data["phone"],
+                password = hashed_password
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            db.session['id'] = new_user.id
+            return jsonify({'message': 'Registration Successful'})
+    else:
+        return jsonify({'message': 'Missing username or password'})
+    
+@app.route('/logout', methods=['POST'])
+def logout():
+    db.session.pop('id', None)
+    return {"msg": "User logged out"}
+
 
 @app.route('/customers', methods=['GET'])
 def get_customers():

@@ -1,0 +1,26 @@
+#home {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    
+  }
+  
+  #home td, #home th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #home tr:nth-child(even){
+    background-color: gray;
+    color: black;
+  }
+  
+  #home tr:hover {background-color: magenta;}
+  
+  #home th {
+    padding: 12px 0 12px 0;
+    text-align: left;
+    background-color: blue;
+    color: white;
+  }
+  

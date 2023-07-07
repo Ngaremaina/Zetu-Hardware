@@ -1,6 +1,21 @@
 import React from "react";
+import Userslist from "./UserTable";
 
-const Dashboard = () => {
+const Dashboard = ({users}) => {
+    const userslist = []
+    Object.values(users).map((user) => {
+        user.map(item => {
+           
+            userslist.push(item)
+            return userslist
+    })
+    return user
+    })
+    
+    const displayData = userslist.map(item => {
+        
+        return <Userslist key = {item.id} firstname = {item.firstname} lastname = {item.lastname} phone = {item.phone} email = {item.email}/>
+    })
     return(
         <div className="content-wrapper">
         <div className="content-header">
@@ -70,7 +85,9 @@ const Dashboard = () => {
                 </div>
                 </div>
             </div>
-            </div></section>
+            </div>
+            {displayData}
+            </section>
             </div>
 
     )
