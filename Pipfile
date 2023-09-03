@@ -11,6 +11,7 @@ flask-bcrypt = "*"
 flask-sqlalchemy = "*"
 sqlalchemy-serializer = "*"
 sqlalchemy = "*"
+gunicorn = "*"
 
 [dev-packages]
 
