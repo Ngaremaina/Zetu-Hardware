@@ -7,8 +7,8 @@ from models import db
 
 app = Flask(__name__,
             static_url_path='',
-            static_folder='../../client/build',
-            template_folder='../../client/build')
+            static_folder='../../frontend/build',
+            template_folder='../../frontend/build')
 
 app.debug = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
