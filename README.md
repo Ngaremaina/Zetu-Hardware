@@ -1,7 +1,7 @@
 # Zetu-Hardware
 
 **Project Description:** 
-Provide a brief description of what your project does, its purpose, and why it's useful.
+This is an e-commerce web application built using Python and React, designed to provide a platform for online shopping. It includes features such as product listings, user authentication, and more.
 
 ## Table of Contents
 
@@ -13,34 +13,45 @@ Provide a brief description of what your project does, its purpose, and why it's
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 
-## Getting Started
-
-Explain how to get started with your project, including installation and any necessary setup. Use subsections for clarity.
+### Features
+Product Listings: Browse and search for products.
+User Authentication: Sign up, login, and manage your user profile.
+CRUD Functionality: Add, Update, Delete and Browse products.
+Admin Dashboard: Manage products and orders (admin users only).
 
 ### Prerequisites
 
-List any software, libraries, or tools that users need to have installed before they can use your project.
+Frontend: React, React Router, HTML, CSS, JavaScript, Bootstrap
+Backend: Python, Flask, Flask REST Framework
+Database: SQLite
+Authentication: JWT (JSON Web Tokens)
 
 ### Installation
 
-Provide step-by-step instructions on how to install your project.
+Clone the repository: git clone https://github.com/Ngaremaina/Zetu-Hardware
 
-## Usage
+Change to the project directory: cd Zetu-Hardware
 
-Explain how to use your project once it's installed. Include examples and screenshots if applicable.
+Install frontend dependencies: cd frontend && npm install
 
-## Contributing
+Install backend dependencies: cd .. && pip install -r requirements.txt
 
-Explain how others can contribute to your project. Include guidelines for code style, pull request format, and any other relevant information.
+Run the development server:
 
-## License
+For the frontend: cd frontend && npm start
+For the backend: cd server && python app.py
+Access the app in your browser: http://localhost:3000/
 
-This project is licensed under the [License Name] License - see the [LICENSE.md](LICENSE.md) file for details.
+### Folder Structure
+frontend/: Contains the React frontend code.
+server/: Contains the Flask backend code.
 
-## Acknowledgments
+### Usage
+Visit the homepage to browse and add products to your cart.
+Create an account or login to access the checkout feature.
+Admin users can access the admin dashboard to manage products and orders.
+### Contributing
+We welcome contributions! If you'd like to improve this project, please fork the repository and submit a pull request. Please follow our Contributing Guidelines.
 
-Give credit to any resources, libraries, or tools that you used or were inspired by during the development of your project.
-
----
-
-**Note:** Customize this template to fit the specific details and needs of your GitHub project. Be sure to replace `[Project Name]`, `[Project Description]`, `[License Name]`, and other placeholders with the actual information relevant to your project.
+### License
+This project is licensed under the [MIT License] License - see the [LICENSE.md](LICENSE.md) file for details.
