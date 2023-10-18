@@ -1,7 +1,7 @@
 # Zetu-Hardware
 
 **Project Description:** 
-This is an e-commerce web application built using Python and React, designed to provide a platform for online shopping. It includes features such as product listings, user authentication, and more.
+Zetu Hardware is a robust and user-friendly web application tailored to the construction sector. It's a one-stop destination for contractors, builders, DIY enthusiasts, and construction professionals looking for high-quality tools and equipment. Whether you're working on a large-scale construction project or a home improvement task, Zetu Hardware has you covered.
 
 ## Table of Contents
 
