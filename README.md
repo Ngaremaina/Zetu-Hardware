@@ -5,13 +5,12 @@ This is an e-commerce web application built using Python and React, designed to 
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
+- [Features](#features)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+- [Folder Structure](#folder structure)
 - [Usage](#usage)
-- [Contributing](#contributing)
 - [License](#license)
-- [Acknowledgments](#acknowledgments)
 
 ### Features
 Product Listings: Browse and search for products.
