@@ -1,6 +1,7 @@
 from client import app, bcrypt
 from flask import request, make_response, jsonify,session, render_template
 from models import *
+
 @app.route('/')
 def index():
     return render_template("index.html")

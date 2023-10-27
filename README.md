@@ -40,10 +40,6 @@ For the frontend: cd frontend && npm start
 For the backend: cd server && python app.py
 Access the app in your browser: http://localhost:3000/
 
-### Folder Structure
-* frontend/: Contains the React frontend code.
-* server/: Contains the Flask backend code.
-
 ### Usage
 Visit the homepage to browse and add products to your cart.
 Create an account or login to access the checkout feature.
