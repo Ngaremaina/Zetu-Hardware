@@ -8,7 +8,6 @@ Zetu Hardware is a robust and user-friendly web application tailored to the cons
 - [Features](#features)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-- [Folder Structure](#folder structure)
 - [Usage](#usage)
 - [License](#license)
 
@@ -42,8 +41,8 @@ For the backend: cd server && python app.py
 Access the app in your browser: http://localhost:3000/
 
 ### Folder Structure
-frontend/: Contains the React frontend code.
-server/: Contains the Flask backend code.
+* frontend/: Contains the React frontend code.
+* server/: Contains the Flask backend code.
 
 ### Usage
 Visit the homepage to browse and add products to your cart.
