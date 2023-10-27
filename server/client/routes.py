@@ -1,9 +1,9 @@
 from client import app, bcrypt
-from flask import request, make_response, jsonify,session
+from flask import request, make_response, jsonify,session, render_template
 from models import *
 @app.route('/')
 def index():
-    return "Index for Customer/Hardware/Manufacturer API"
+    return render_template("index.html")
 
 @app.route('/login', methods=['POST'])
 def login():
